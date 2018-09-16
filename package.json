@@ -1,0 +1,26 @@
+{
+  "name": "spotify-browser",
+  "version": "0.1.0",
+  "description": "Spotify Browser",
+  "main": "./app/src/index.js",
+  "dependencies": {
+    "react-scripts": "1.1.5"
+  },
+  "scripts": {
+    "start": "cd app && react-scripts start",
+    "build": "cd app && react-scripts build && rm -rf ../dist && mv build ../dist",
+    "test": "cd app && react-scripts test --env=jsdom",
+    "eject": "cd app && react-scripts eject"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/starcher26/spotify-browser.git"
+  },
+  "keywords": [
+    "spotify"
+  ],
+  "author": "Starcher26",
+  "bugs": {
+    "url": "https://github.com/starcher26/spotify-browser/issues"
+  }
+}
