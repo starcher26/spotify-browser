@@ -1,6 +1,8 @@
 const defaultState = {
   artistIds: "",
   getArtistsPending: true,
+  artists: [],
+  albumIds: "",
   viewType: "artists"
 };
 
@@ -11,7 +13,7 @@ export const artistReducer = (state = defaultState, action) => {
         ...state,
         artistIds: action.artistIds
       };
-
+    
     case "ARTISTS_PENDING":
       return {
         ...state,
@@ -22,6 +24,7 @@ export const artistReducer = (state = defaultState, action) => {
       return {
         ...state,
         artists: action.artists,
+        albumIds: "",
         getArtistsError: false,
         getArtistsPending: false
       };
@@ -58,13 +61,15 @@ export const artistReducer = (state = defaultState, action) => {
     case "SEARCH_ARTISTS_PENDING":
       return {
         ...state,
-        searchArtistsPending: true
+        searchArtistsPending: true,
+        artists: []
       };
 
     case "SEARCH_ARTISTS_SUCCESS":
       return {
         ...state,
         artists: action.artists,
+        albumIds: "",
         searchArtistsError: false,
         searchArtistsPending: false,
         viewType: "search"

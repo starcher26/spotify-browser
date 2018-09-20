@@ -1,5 +1,4 @@
 const defaultState = {
-  // albumIds: "",
   albums: [],
   getAlbumsError: false,
   getAlbumsPending: true,
@@ -17,20 +16,24 @@ export const albumsReducer = (state = defaultState, action) => {
         ...state,
         getAlbumsPending: true
       };
-
+    case "INITIALIZE_ALBUMS_LIST":
+      return {
+        ...state,
+        albums: []
+      };
     case "ALBUMS_SUCCESS":
       return {
         ...state,
         albums: action.albums,
         getAlbumsError: false,
-        getAlbumsPending: false
+        getAlbumsPending: false,
       };
 
     case "ALBUMS_ERROR":
       return {
         ...state,
         getAlbumsError: true,
-        getAlbumsPending: false
+        getAlbumsPending: false,
       };
 
     case "ALBUMS_SONGS_PENDING":

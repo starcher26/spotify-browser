@@ -1,3 +1,8 @@
+export const initializeAlbumsList = () => {
+  return {
+    type: "INITIALIZE_ALBUMS_LIST"
+  };
+};
 export const getAlbumsPending = () => {
   return {
     type: "ALBUMS_PENDING"
@@ -29,7 +34,6 @@ export const getAlbums = (albumIds, accessToken) => {
       }
     );
     dispatch(getAlbumsPending());
-
     fetch(request)
       .then(res => {
         return res.json();
@@ -78,7 +82,7 @@ export const getAlbumSongs = (albumId, accessToken) => {
       }
     );
 
-    dispatch(getAlbumsPending());
+    dispatch(getAlbumsSongsPending());
 
     fetch(request)
       .then(res => {

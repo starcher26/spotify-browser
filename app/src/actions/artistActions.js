@@ -1,5 +1,5 @@
 import uniqBy from 'lodash/uniqBy';
-import { setAlbumIds } from './albumActions';
+import { setAlbumIds, initializeAlbumsList } from './albumActions';
 import { getAlbumsPending } from './albumActions';
 // while searching for artist
 export const getArtistsPending = () => {
@@ -61,7 +61,7 @@ export const getPopularArtists = accessToken => {
     );
 
     dispatch(getArtistsPending());
-
+    
     fetch(request)
       .then(res => {
         if (res.statusText === "Unauthorized") {
@@ -119,7 +119,10 @@ export const getArtistAlbums = (artistId, accessToken) => {
         })
       }
     );
+
     dispatch(getArtistAlbumsPending());
+    // Trigger album list initialization to avoid display bugs
+    dispatch(initializeAlbumsList());
 
     fetch(request)
       .then(res => {
