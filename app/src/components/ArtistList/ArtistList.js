@@ -6,22 +6,21 @@ import noImage from "../../no_image_available.svg";
 
 class ArtistList extends Component {
   componentWillReceiveProps(nextProps) {
-    // console.log(nextProps);
-    // console.log(this.state);
-    // if (
-    //   nextProps.token !== "" &&
-    //   !nextProps.getArtistsError &&
-    //   nextProps.getArtistsPending &&
-    //   nextProps.viewType === "artists"
-    // ) {
-    //   this.props.getPopularArtists(nextProps.token);
-    // }
+    if (
+      nextProps.token !== "" &&
+      !nextProps.getArtistsError &&
+      nextProps.getArtistsPending &&
+      nextProps.viewType === "artists"
+    ) {
+      this.props.getPopularArtists(nextProps.token);
+    }
   }
   renderArtists() {
     return this.props.artists.map((artist, i) => {
       const artistAlbumsAction = (artist, token) => {
         this.props.getArtistAlbums(artist.artist.id, token);
         this.props.updateTitle(artist.artist.name);
+        this.props.updateViewType("albums");
       };
       return (
         <div
@@ -32,14 +31,6 @@ class ArtistList extends Component {
           key={i}
         >
           <div className="artist-item">
-            {/* <div>
-              <div className="artist-image">
-              
-              </div>
-              <div className="artist-details">
-                <p></p>
-              </div>
-            </div> */}
             <div className="row align-items-center">
               <div className="artist-image col-auto">
                 <img
@@ -48,6 +39,7 @@ class ArtistList extends Component {
                       ? artist.artist.images[0].url
                       : noImage
                   }
+                  alt="Artist Image"
                 />
               </div>
               <div className="artist-name col-auto">
@@ -62,9 +54,7 @@ class ArtistList extends Component {
   render() {
     return (
       <div className="row justify-space-between">
-        {/* <div className="artist-view-container container"> */}
         {this.props.artists && this.renderArtists()}
-        {/* </div> */}
       </div>
     );
   }

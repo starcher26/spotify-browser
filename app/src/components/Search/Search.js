@@ -18,8 +18,8 @@ class Search extends Component {
 	render() {
 		const submitSearch = (searchTerm, token) => {
 			this.props.searchArtists(searchTerm, token);
-			console.log(token);
 			this.props.updateTitle(searchTerm);
+			this.props.updateViewType('search');
 		}
 
 	  return(
