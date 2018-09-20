@@ -1,9 +1,17 @@
-.album-item .album-name {
+.album-item
+{
+    margin-bottom: 1rem;
+}
+.album-item .album-infos
+{
+    height: 80px;
+}
+.album-item .album-infos .album-name {
   font-size: 1.5rem;
   font-weight: bold;
   text-align: center;
 }
-.album-item .album-genres {
+.album-item .album-infos .album-genres {
   font-size: 1, 25rem;
   color: #f9f9f9;
   text-align: center;

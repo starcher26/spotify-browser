@@ -36,8 +36,10 @@ class AlbumList extends Component {
           </div>
 
           <div className="album-details">
-            <p className="album-name">{album.album.name}</p>
-            <p className="album-genre">{album.album.genres.join(", ")}</p>
+            <div className="album-infos">
+                <p className="album-name">{album.album.name}</p>
+                <p className="album-genre">{album.album.genres.join(", ")}</p>
+            </div>
             <div className="row justify-space-between">
               <div className="col">
                 <div className="album-popularity">{album.album.popularity}</div>
