@@ -25,6 +25,11 @@
 .album-item .album-popularity {
   text-align: left;
 }
+/* .album-item .album-popularity .star-container .widget-svg .star
+{
+    fill: yellow !important;
+} */
 .album-item .album-date {
   text-align: right;
 }
+

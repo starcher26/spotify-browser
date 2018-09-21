@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import StarRatings from "react-star-ratings";
+import Moment from "moment";
 import "./AlbumList.css";
 
 class AlbumList extends Component {
   componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
     if (
       nextProps.token !== "" &&
       nextProps.albumIds !== "" &&
@@ -37,15 +40,24 @@ class AlbumList extends Component {
 
           <div className="album-details">
             <div className="album-infos">
-                <p className="album-name">{album.album.name}</p>
-                <p className="album-genre">{album.album.genres.join(", ")}</p>
+              <p className="album-name">{album.album.name}</p>
+              <p className="album-genre">{album.album.genres.join(", ")}</p>
             </div>
             <div className="row justify-space-between">
-              <div className="col">
-                <div className="album-popularity">{album.album.popularity}</div>
+              <div className="col-9">
+                <div className="album-popularity">
+                  <StarRatings
+                    rating={album.album.popularity / 20}
+                    starDimension="20px"
+                    starSpacing="5px"
+                    starRatedColor="yellow"
+                  />
+                </div>
               </div>
               <div className="col">
-                <div className="album-date">{album.album.release_date}</div>
+                <div className="album-date">
+                  {Moment(album.album.release_date).format("Y")}
+                </div>
               </div>
             </div>
           </div>
@@ -55,7 +67,9 @@ class AlbumList extends Component {
   }
   render() {
     return (
-      <div className="row justify-space-between">{this.renderAlbums()}</div>
+      <div className="row justify-space-between">
+        {this.props.albums && this.renderAlbums()}
+      </div>
     );
   }
 }
