@@ -1,0 +1,10 @@
+.songs-list .hidden
+{
+    display: none;
+}
+.songs-list > ul
+{
+    padding: 0 2rem;
+    list-style: decimal;
+    margin-top: 2rem;
+}
