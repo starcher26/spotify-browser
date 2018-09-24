@@ -8,8 +8,7 @@ import SongList from "../SongList";
 
 class AlbumList extends Component {
   componentWillReceiveProps(nextProps) {
-    console.log("PROPS");
-    console.log(this.props);
+    // Get albums
     if (
       nextProps.token !== "" &&
       nextProps.albumIds !== "" &&
@@ -23,19 +22,19 @@ class AlbumList extends Component {
   renderAlbums() {
     return this.props.albums.map((album, i) => {
       const handleToggle = (albumId, token) => {
-        console.log("album ID");
-        console.log(albumId);
         let albumSongs = {};
+        // Filter all albums' songs list on album id
         albumSongs = this.props.songs
           ? this.props.songs.filter(function(song) {
               return song.id === albumId;
             })
           : {};
-
+        // Change visible flag for a song list.
         let visible =
           albumSongs && albumSongs[0] !== undefined
             ? albumSongs[0].visible
             : false;
+        // do we have to add this new object to songlist state ?
         let addFlag = albumSongs && albumSongs[0] !== undefined ? false : true;
         this.props.getAlbumSongs(albumId, token, albumSongs, addFlag, !visible);
       };
@@ -45,9 +44,6 @@ class AlbumList extends Component {
             return song.id === album.album.id;
           })
         : {};
-      console.log("REGARDE");
-      console.log(album.album.name);
-      console.log(albumSongs);
       return (
         <div
           className="col-xl-3 col-lg-4 col-md-6 col-sm-12"
@@ -129,10 +125,10 @@ class AlbumList extends Component {
 AlbumList.propTypes = {
   albums: PropTypes.array,
   songs: PropTypes.array,
-  visible: PropTypes.array,
+//   visible: PropTypes.array,
   getAlbums: PropTypes.func,
   getAlbumSongs: PropTypes.func,
-  changeVisible: PropTypes.func,
+//   changeVisible: PropTypes.func,
   token: PropTypes.string
 };
 

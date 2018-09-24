@@ -132,19 +132,14 @@ export const getArtistAlbums = (artistId, accessToken) => {
         return res.json();
       })
       .then(res => {
-        // map the response to match that returned from get song request
-        // console.log(res);
-        
-        // let albumIds = res.items.map(item => {
-        //   return item.id;
-        // });
+
+        // get a list of unique album ids
         let albumIds = uniqBy(res.items, (item) => {
           return item.name;
         }).map(item => {
           return item.id;
         }).join(',');
-        // console.log(albumIds);
-        setAlbumIds(albumIds);
+        // setAlbumIds(albumIds);
         dispatch(getAlbumsPending()); // Put the albums list state to pending
         dispatch(getArtistAlbumsSuccess(albumIds));
       })

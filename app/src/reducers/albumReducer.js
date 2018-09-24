@@ -56,21 +56,11 @@ export const albumsReducer = (state = defaultState, action) => {
       };
 
     case "ALBUMS_SONGS_SUCCESS":
-      console.log("reducer");
-      console.log(action.songs);
-      console.log('state songs');
-      console.log(state.songs);
-      // console.log(state.songs.map(song => {
-      //   return song.id === action.songs.id
-      //     ? (song.visible = action.songs.visible)
-      //     : song;
-      // }));
+      // Adding new songs list object when necessary
       action.songs.addFlag && state.songs.push(action.songs);
       return {
         ...state,
         songs: editVisibleSongs(state.songs, action.songs.id, action.songs.visible),
-        // songs: state.songs.push(action.songs),
-        // songs: action.songs,
         getAlbumsSongsError: false,
         getAlbumsSongsPending: false
       };

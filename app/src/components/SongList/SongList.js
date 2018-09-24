@@ -4,8 +4,6 @@ import "./SongList.css";
 
 const SongList = ({ songs, show }) => {
   const renderSongs = () => {
-      console.log("SongList show");
-      console.log(show);
     return songs.map((song, i) => {
       return (
         <li className="song-item" key={i}>

@@ -24,7 +24,6 @@ export const getAlbumsError = () => {
 
 export const getAlbums = (albumIds, accessToken) => {
   return dispatch => {
-    // console.log('dispatch');
     const request = new Request(
       `https://api.spotify.com/v1/albums/?ids=${albumIds}`,
       {
@@ -58,10 +57,10 @@ export const getAlbumsSongsPending = () => {
   };
 };
 
-export const getAlbumsSongsSuccess = albums => {
+export const getAlbumsSongsSuccess = songs => {
   return {
     type: "ALBUMS_SONGS_SUCCESS",
-    albums
+    songs
   };
 };
 
@@ -71,29 +70,76 @@ export const getAlbumsSongsError = () => {
   };
 };
 
-export const getAlbumSongs = (albumId, accessToken) => {
+export const getAlbumsSongsVisibility = (albumId, show) => {
+  return {
+    type: "ALBUMS_SONGS_VISIBLE",
+    visibility: {
+      id: albumId,
+      show: show
+    }
+  };
+};
+export function changeVisible(albumId, addFlag, visible) {
+  return {
+    type: "CHANGE_VISIBLE_STATE",
+    addFlag,
+    visibleList: {
+      id: albumId,
+      visible: visible
+    }
+  };
+}
+export const getAlbumSongs = (
+  albumId,
+  accessToken,
+  songs,
+  addFlag,
+  visible
+) => {
   return dispatch => {
-    const request = new Request(
-      `https://api.spotify.com/v1/albums/${albumId}/tracks `,
-      {
-        headers: new Headers({
-          Authorization: "Bearer " + accessToken
+    if (songs && songs[0] !== undefined) {
+      let albumSongs = {
+        id: albumId,
+        songs: songs[0].songs,
+        visible: visible,
+        addFlag: addFlag
+      };
+      dispatch(getAlbumsSongsSuccess(albumSongs));
+    } else {
+      const request = new Request(
+        `https://api.spotify.com/v1/albums/${albumId}/tracks `,
+        {
+          headers: new Headers({
+            Authorization: "Bearer " + accessToken
+          })
+        }
+      );
+
+      dispatch(getAlbumsSongsPending());
+
+      fetch(request)
+        .then(res => {
+          return res.json();
         })
-      }
-    );
+        .then(res => {
+          let songs = res.items.map(item => {
+            return {
+              song: item
+            };
+          });
 
-    dispatch(getAlbumsSongsPending());
-
-    fetch(request)
-      .then(res => {
-        return res.json();
-      })
-      .then(res => {
-        dispatch(getAlbumsSongsSuccess(res.items));
-      })
-      .catch(err => {
-        dispatch(getAlbumsSongsError(err));
-      });
+          res.items = {
+            id: albumId,
+            songs: songs,
+            visible: visible,
+            addFlag: addFlag
+          };
+          dispatch(getAlbumsSongsSuccess(res.items));
+        })
+        .catch(err => {
+          dispatch(getAlbumsSongsError(err));
+        });
+    }
   };
 };
 
