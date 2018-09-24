@@ -1,13 +1,11 @@
 import Content from "./Content";
 import { connect } from "react-redux";
 
-const mapStateToProps = (state) => {
-
+const mapStateToProps = state => {
   return {
     title: state.uiReducer.title,
-    viewType: state.uiReducer.viewType,
+    viewType: state.uiReducer.viewType
   };
-
 };
 
 export default connect(mapStateToProps)(Content);

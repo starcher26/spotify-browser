@@ -2,7 +2,7 @@ import Search from "./Search";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { searchArtists } from '../../actions/artistActions';
-import { updateTitle } from "../../actions/uiActions";
+import { updateTitle, updateViewType } from "../../actions/uiActions";
 
 const mapStateToProps = (state) => {
 
@@ -16,7 +16,8 @@ const mapDispatchToProps = (dispatch) => {
 
   return bindActionCreators({
     searchArtists,
-    updateTitle
+    updateTitle,
+    updateViewType
   }, dispatch);
 
 };

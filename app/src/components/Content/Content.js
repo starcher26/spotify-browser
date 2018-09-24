@@ -5,7 +5,6 @@ import ArtistList from '../ArtistList';
 import './Content.css';
 
 const Content = ({ viewType }) => {
-
   return (
     <div>
       {

@@ -1,0 +1,55 @@
+.album-item
+{
+    margin-bottom: 1rem;
+}
+.album-item .album-infos
+{
+    height: 80px;
+}
+.album-item .album-details
+{
+    background-color: #000;
+    color: #FFF;
+    padding: 1rem 0.5rem;
+}
+.album-item .album-infos .album-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+.album-item .album-infos .album-genres {
+  font-size: 1, 25rem;
+  color: #FFFFFF;
+  text-align: center;
+}
+.album-item .album-popularity,
+.album-item .album-date {
+  display: inline-block;
+  vertical-align: middle;
+  width: 100%;
+}
+.album-item .album-popularity {
+  text-align: left;
+}
+/* .album-item .album-popularity .star-container .widget-svg .star
+{
+    fill: yellow !important;
+} */
+.album-item .album-date {
+  text-align: right;
+}
+.album-item .album-details .inspect-song
+{
+    margin-top: 1rem;
+    text-align: center;
+}
+.album-item .album-details .inspect-song button > span
+{
+    display: inline-block;
+    vertical-align: middle;
+}
+.album-item .album-details .inspect-song button > .inspect-icon
+{
+    margin-right: 0.5rem;
+}
+

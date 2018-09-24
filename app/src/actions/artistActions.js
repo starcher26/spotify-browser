@@ -1,3 +1,6 @@
+import uniqBy from 'lodash/uniqBy';
+import { setAlbumIds, initializeAlbumsList } from './albumActions';
+import { getAlbumsPending } from './albumActions';
 // while searching for artist
 export const getArtistsPending = () => {
   return {
@@ -23,14 +26,11 @@ export const getArtistsError = () => {
 // get artists
 export const getArtists = (accessToken, artistIds) => {
   return dispatch => {
-    const request = new Request(
-      `https://api.spotify.com/v1/artists/${artistIds}`,
-      {
-        headers: new Headers({
-          Authorization: "Bearer " + accessToken
-        })
-      }
-    );
+    const request = new Request(`https://api.spotify.com/v1/artists`, {
+      headers: new Headers({
+        Authorization: "Bearer " + accessToken
+      })
+    });
 
     dispatch(getArtistsPending());
 
@@ -47,33 +47,12 @@ export const getArtists = (accessToken, artistIds) => {
   };
 };
 
-// pending state while geting a songs of an artist
-export const getArtistSongsPending = () => {
-  return {
-    type: "ARTIST_SONGS_PENDING"
-  };
-};
-
-// getting artist songs => success
-export const getArtistSongsSuccess = songs => {
-  return {
-    type: "ARTIST_SONGS_SUCCESS",
-    songs
-  };
-};
-
-// getting artist songs => error
-export const getArtistSongsError = () => {
-  return {
-    type: "ARTIST_SONGS_ERROR"
-  };
-};
-
-// retrieve artist songs
-export const getArtistSongs = (artistId, accessToken) => {
+//getPopularArtists
+export const getPopularArtists = accessToken => {
+  // console.log(artistIds);
   return dispatch => {
     const request = new Request(
-      `https://api.spotify.com/v1/artists/${artistId}/top-tracks?country=CA`,
+      `https://api.spotify.com/v1/search?q=year:2018&type=artist&limit=12`,
       {
         headers: new Headers({
           Authorization: "Bearer " + accessToken
@@ -81,7 +60,69 @@ export const getArtistSongs = (artistId, accessToken) => {
       }
     );
 
-    dispatch(getArtistSongsPending());
+    dispatch(getArtistsPending());
+    
+    fetch(request)
+      .then(res => {
+        if (res.statusText === "Unauthorized") {
+          window.location.href = "./";
+        }
+        return res.json();
+      })
+      .then(res => {
+        res.items = res.artists.items.map(item => {
+          return {
+            artist: item
+          };
+        });
+        // console.log(res.items);
+        dispatch(getAlbumsPending());
+        dispatch(getArtistsSuccess(res.items));
+      })
+      .catch(err => {
+        dispatch(getArtistsError(err));
+      });
+  };
+};
+
+// pending state while geting albums of an artist
+export const getArtistAlbumsPending = () => {
+  return {
+    type: "ARTIST_ALBUMS_PENDING"
+  };
+};
+
+// getting artist albums => success
+export const getArtistAlbumsSuccess = (albumIds) => {
+  return {
+    type: "ARTIST_ALBUMS_SUCCESS",
+    viewType: "albums",
+    albumIds: albumIds
+  };
+};
+
+// getting artist albums => error
+export const getArtistAlbumsError = () => {
+  return {
+    type: "ARTIST_ALBUMS_ERROR"
+  };
+};
+
+// retrieve artist albums
+export const getArtistAlbums = (artistId, accessToken) => {
+  return dispatch => {
+    const request = new Request(
+      `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=album`,
+      {
+        headers: new Headers({
+          Authorization: "Bearer " + accessToken
+        })
+      }
+    );
+
+    dispatch(getArtistAlbumsPending());
+    // Trigger album list initialization to avoid display bugs
+    dispatch(initializeAlbumsList());
 
     fetch(request)
       .then(res => {
@@ -91,17 +132,73 @@ export const getArtistSongs = (artistId, accessToken) => {
         return res.json();
       })
       .then(res => {
-        // map the response to match that returned from get song request
-        res.items = res.tracks.map(item => {
-          return {
-            track: item
-          };
-        });
 
-        dispatch(getArtistSongsSuccess(res.items));
+        // get a list of unique album ids
+        let albumIds = uniqBy(res.items, (item) => {
+          return item.name;
+        }).map(item => {
+          return item.id;
+        }).join(',');
+        // setAlbumIds(albumIds);
+        dispatch(getAlbumsPending()); // Put the albums list state to pending
+        dispatch(getArtistAlbumsSuccess(albumIds));
       })
       .catch(err => {
-        dispatch(getArtistSongsError(err));
+        dispatch(getArtistAlbumsError(err));
+      });
+  };
+};
+
+export const searchArtistsPending = () => {
+  return {
+    type: "SEARCH_ARTISTS_PENDING"
+  };
+};
+
+export const searchArtistsSuccess = artists => {
+  return {
+    type: "SEARCH_ARTISTS_SUCCESS",
+    artists
+  };
+};
+
+export const searchArtistsError = () => {
+  return {
+    type: "SEARCH_ARTISTS_ERROR"
+  };
+};
+
+export const searchArtists = (searchTerm, accessToken) => {
+  return dispatch => {
+    const request = new Request(
+      `https://api.spotify.com/v1/search?q=${searchTerm}&type=artist`,
+      {
+        headers: new Headers({
+          Authorization: "Bearer " + accessToken,
+          Accept: "application/json"
+        })
+      }
+    );
+
+    dispatch(searchArtistsPending());
+
+    fetch(request)
+      .then(res => {
+        if (res.statusText === "Unauthorized") {
+          window.location.href = "./";
+        }
+        return res.json();
+      })
+      .then(res => {
+        res.items = res.artists.items.map(item => {
+          return {
+            artist: item
+          };
+        });
+        dispatch(searchArtistsSuccess(res.items));
+      })
+      .catch(err => {
+        dispatch(searchArtistsError(err));
       });
   };
 };
