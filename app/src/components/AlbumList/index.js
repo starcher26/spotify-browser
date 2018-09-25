@@ -1,7 +1,7 @@
 import AlbumList from "./AlbumList";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { getAlbums, getAlbumSongs } from "../../actions/albumActions";
+import { getAlbums, changeVisible } from "../../actions/albumActions";
 import { updateTitle } from "../../actions/uiActions";
 
 const mapStateToProps = state => {
@@ -12,8 +12,7 @@ const mapStateToProps = state => {
     albumIds: state.artistReducer.albumIds ? state.artistReducer.albumIds : "",
     getAlbumsError: state.albumReducer.getAlbumsError,
     getAlbumsPending: state.albumReducer.getAlbumsPending,
-    // visibleList: state.albumReducer.visibleList,
-    songs: state.albumReducer.songs,
+    visibleList: state.albumReducer.visibleList,
     viewType: state.uiReducer.viewType
   };
 };
@@ -21,9 +20,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      //   getPopularArtists,
       getAlbums,
-      getAlbumSongs,
+      changeVisible,
       updateTitle
     },
     dispatch

@@ -7,7 +7,7 @@ const SongList = ({ songs, show }) => {
     return songs.map((song, i) => {
       return (
         <li className="song-item" key={i}>
-            {song.song.name}
+            {song.name}
         </li>
       );
     });

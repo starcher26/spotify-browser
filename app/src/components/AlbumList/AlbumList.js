@@ -21,29 +21,24 @@ class AlbumList extends Component {
   }
   renderAlbums() {
     return this.props.albums.map((album, i) => {
-      const handleToggle = (albumId, token) => {
-        let albumSongs = {};
-        // Filter all albums' songs list on album id
-        albumSongs = this.props.songs
-          ? this.props.songs.filter(function(song) {
-              return song.id === albumId;
-            })
-          : {};
-        // Change visible flag for a song list.
-        let visible =
-          albumSongs && albumSongs[0] !== undefined
-            ? albumSongs[0].visible
-            : false;
-        // do we have to add this new object to songlist state ?
-        let addFlag = albumSongs && albumSongs[0] !== undefined ? false : true;
-        this.props.getAlbumSongs(albumId, token, albumSongs, addFlag, !visible);
-      };
       // We only get state of the list song of the current album
-      let albumSongs = this.props.songs
-        ? this.props.songs.filter(function(song) {
-            return song.id === album.album.id;
+      let visibleSongsList = this.props.visibleList
+        ? this.props.visibleList.filter(function(list) {
+            return list.id === album.album.id;
           })
         : {};
+      const handleToggle = (albumId, token) => {
+        
+        // Change visible flag for an album's songs list.
+        let visible =
+          visibleSongsList && visibleSongsList[0] !== undefined
+            ? visibleSongsList[0].visible
+            : false;
+        // do we have to add this new object to visible list state ?
+        let addFlag = visibleSongsList && visibleSongsList[0] !== undefined ? false : true;
+        this.props.changeVisible(albumId, addFlag, !visible);
+      };
+
       return (
         <div
           className="col-xl-3 col-lg-4 col-md-6 col-sm-12"
@@ -88,14 +83,14 @@ class AlbumList extends Component {
                   <span className="inspect-icon">
                     <i
                       className={
-                        albumSongs[0] && albumSongs[0].visible
+                        visibleSongsList[0] && visibleSongsList[0].visible
                           ? "fas fa-minus"
                           : "fas fa-plus"
                       }
                     />
                   </span>
                   <span className="inspect-label">
-                    {albumSongs[0] && albumSongs[0].visible
+                    {visibleSongsList[0] && visibleSongsList[0].visible
                       ? "Hide songs"
                       : "Inspect songs"}
                   </span>
@@ -103,8 +98,8 @@ class AlbumList extends Component {
               </div>
               <div className="songs-list">
                 <SongList
-                  songs={albumSongs[0] && albumSongs[0].songs}
-                  show={albumSongs[0] && albumSongs[0].visible ? "" : "hidden"}
+                  songs={album.album.tracks.items}
+                  show={visibleSongsList[0] && visibleSongsList[0].visible ? "" : "hidden"}
                 />
               </div>
             </div>
@@ -124,11 +119,9 @@ class AlbumList extends Component {
 
 AlbumList.propTypes = {
   albums: PropTypes.array,
-  songs: PropTypes.array,
-//   visible: PropTypes.array,
+  visibleList: PropTypes.array,
   getAlbums: PropTypes.func,
-  getAlbumSongs: PropTypes.func,
-//   changeVisible: PropTypes.func,
+  changeVisible: PropTypes.func,
   token: PropTypes.string
 };
 

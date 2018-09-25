@@ -2,15 +2,12 @@ const defaultState = {
   albums: [],
   getAlbumsError: false,
   getAlbumsPending: true,
-  inspectSongsIcon: "fas fa-plus",
-  inspectSongsLabel: "Inspect songs",
-  songs: [],
   visibleList: []
 };
-const editVisibleSongs = (songs, id, visible) => {
-  return songs.map(song => {
-      var temp = Object.assign({}, song);
-      if (id === song.id) {
+const editVisibleSongs = (list, albumId, visible) => {
+  return list.map(album => {
+      var temp = Object.assign({}, album);
+      if (albumId === album.id) {
           temp.visible = visible;
       }
       return temp;
@@ -71,28 +68,21 @@ export const albumsReducer = (state = defaultState, action) => {
         getAlbumsSongsError: true,
         getAlbumsSongsPending: false
       };
-    // case "CHANGE_VISIBLE_STATE":
-    //   console.log(state.visibleList);
-      
-    //   console.log(state.visibleList);
-    //   action.addFlag && state.visibleList.push(action.visibleList);
-    //   return {
-    //     ...state,
-    //     visibleList: state.visibleList.map(visibleItem => {
-    //       return visibleItem.id === action.visibleList.id
-    //         ? (visibleItem.visible = action.visibleList.visible)
-    //         : visibleItem;
-    //     })
-    //     // visibleList: state.visibleList.map(visibleItem => {
-    //     //   console.log("visibleItem");
-    //     //   console.log(visibleItem);
-    //     //   console.log("visibleList in action");
-    //     //   console.log(action.visibleList);
-    //     //   visibleItem.id === action.visibleList.id
-    //     //     ? { ...action.visibleList, visible: action.visibleList.visible }
-    //     //     : visibleItem;
-    //     // })
-    //   };
+    case "CHANGE_VISIBLE_STATE":
+      action.addFlag && state.visibleList.push(action.visibleList);
+      return {
+        ...state,
+        visibleList: editVisibleSongs(state.visibleList, action.visibleList.id, action.visibleList.visible)
+        // visibleList: state.visibleList.map(visibleItem => {
+        //   console.log("visibleItem");
+        //   console.log(visibleItem);
+        //   console.log("visibleList in action");
+        //   console.log(action.visibleList);
+        //   visibleItem.id === action.visibleList.id
+        //     ? { ...action.visibleList, visible: action.visibleList.visible }
+        //     : visibleItem;
+        // })
+      };
     default:
       return state;
   }
